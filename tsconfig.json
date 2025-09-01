@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    // Output structure
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    // Module resolution for modern Node.js ESM support
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "ES2020",
+
+    // Compatibility with CommonJS packages like Express
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+
+    // Enable ESM-style import/export checking
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+
+    // Optional for debugging
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["src"]
+}
