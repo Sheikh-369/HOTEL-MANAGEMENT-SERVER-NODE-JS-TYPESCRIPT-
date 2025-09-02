@@ -20,7 +20,7 @@ sequelize.authenticate()
     console.log("Authentication was Successful!")
 })
 .catch((err)=>{
-    console.log(`Something went wronmg,:${err}`)
+    console.log(`Something went wrong,:${err}`)
 })
 
 sequelize.sync({alter:false}).then(()=>{
