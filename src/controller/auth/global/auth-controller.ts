@@ -2,8 +2,8 @@ import type { Request, Response } from "express";
 import User from "../../../database/models/user-model.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import generateToken from "../../../services/generateToken.js";
 import sendMail from "../../../services/sendMail.js";
+import generateOTP from "../../../services/generateOTP.js";
 
 const userRegister=async(req:Request,res:Response)=>{
     //taking data from user
@@ -114,7 +114,7 @@ const forgotPassword=async(req:Request,res:Response)=>{
         return
     }
 
-    const OTP=generateToken()
+    const OTP=generateOTP()
     await sendMail({
         to:userEmail,
         subject:"Password Reset Request",
@@ -144,5 +144,65 @@ const forgotPassword=async(req:Request,res:Response)=>{
 }
 
 
+const resetPassword=async(req:Request,res:Response)=>{
+    //taking inpuut
+    const{OTP,userEmail,newPassword,confirmNewPassword}=req.body
 
-export {userRegister,userLogin,forgotPassword}
+    //validation
+    if(!OTP || !userEmail){
+        res.status(400).json({
+            message:"Please provide Email and OTP!"
+        })
+        return
+    }
+
+    //confirming the email exists
+    const user=await User.findOne({where:{userEmail}})
+    if(!user){
+        res.status(400).json({
+            message:"Email or OTP did not match!"
+        })
+        return
+    }
+
+    //OTP confirmation
+    if(OTP.toString()!==user.OTP){
+        res.status(400).json({
+            message:"Invalid OTP!"
+        })
+        return
+    }
+
+    //confirming OTP expiry
+    if(!user.OTP || !user.OTPGeneratedTime || !user.OTPExpiry || user.OTPExpiry < new Date()){
+        res.status(400).json({
+            message:"OTP has expired, please request a new OTP!"
+        })
+        return
+    }
+
+    //checking newPassword and confirmNewPassword
+    if(newPassword !== confirmNewPassword){
+        res.status(400).json({
+            message:"New Password and Confirm New Password did not match!"
+        })
+        return
+    }
+
+    //generating newPassword
+    const hashedPassword=await bcrypt.hash(newPassword,12)
+    user.password=hashedPassword
+    
+
+    //removing OTP information after OTP confirmation
+    user.OTP=null,
+    user.OTPGeneratedTime=null,
+    user.OTPExpiry=null
+    await user.save()
+
+    res.status(200).json({
+        message:"Congratulations!, Your New Password Was Set Successfully!"
+    })
+}
+
+export {userRegister,userLogin,forgotPassword,resetPassword}
