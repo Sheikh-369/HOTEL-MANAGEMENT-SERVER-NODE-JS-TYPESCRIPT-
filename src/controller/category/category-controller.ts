@@ -73,5 +73,28 @@ const deleteCategory = async (req: Request, res: Response) => {
     });
 };
 
+const fetchCategories=async(req:Request,res:Response)=>{
+    const data=await sequelize.query(`SELECT * FROM category`,{
+        type:QueryTypes.SELECT
+    })
 
-export {createCategory,editCategory,deleteCategory}
+    res.status(200).json({
+        message:"All the categories are fetched successfully!",
+        data
+    })
+}
+
+const fetchSingleCategory=async(req:Request,res:Response)=>{
+    const categoryId=req.params.id
+    const data=await sequelize.query(`SELECT * FROM category WHERE id=?`,{
+        type:QueryTypes.SELECT,
+        replacements:[categoryId]
+    })
+
+    res.status(200).json({
+        message:"Category fetched successfully!",
+        data
+    })
+}
+
+export {createCategory,editCategory,deleteCategory,fetchCategories,fetchSingleCategory}
