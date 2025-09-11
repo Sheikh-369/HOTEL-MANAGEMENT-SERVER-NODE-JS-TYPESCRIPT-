@@ -3,7 +3,7 @@ import sequelize from "../../database/connection.js";
 import { QueryTypes } from "sequelize";
 
 const createCategory=async (req:Request,res:Response)=>{
-    const {categoryName}=req.body
+    const {categoryName,categoryDescription}=req.body
     if(!categoryName){
         res.status(400).json({
             message:"Please Provide Category Name!"
@@ -11,17 +11,9 @@ const createCategory=async (req:Request,res:Response)=>{
         return
     }
 
-    await sequelize.query(`CREATE TABLE IF NOT EXISTS category (
-        id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
-        categoryName VARCHAR(50) NOT NULL,
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-
-        )`)
-
-        await sequelize.query(`INSERT INTO category (categoryName) VALUES(?)`,{
+        await sequelize.query(`INSERT INTO category (categoryName,categoryDescription,createdAt,updatedAt) VALUES(?,?,NOW(),NOW())`,{
             type:QueryTypes.INSERT,
-            replacements:[categoryName]
+            replacements:[categoryName,categoryDescription]
         })
 
         res.status(200).json({
@@ -30,7 +22,7 @@ const createCategory=async (req:Request,res:Response)=>{
 }
 
 const editCategory=async (req:Request,res:Response)=>{
-    const {categoryName}=req.body
+    const {categoryName,categoryDescription}=req.body
     const categoryId=req.params.id
     if(!categoryName){
         res.status(400).json({
@@ -40,9 +32,9 @@ const editCategory=async (req:Request,res:Response)=>{
     }
 
     await sequelize.query(`UPDATE category SET
-        categoryName=? WHERE id=?`,{
+        categoryName=?, categoryDescription=?, updatedAt=NOW() WHERE id=?`,{
             type:QueryTypes.UPDATE,
-            replacements:[categoryName,categoryId]
+            replacements:[categoryName,categoryDescription,categoryId]
         })
 
         res.status(200).json({

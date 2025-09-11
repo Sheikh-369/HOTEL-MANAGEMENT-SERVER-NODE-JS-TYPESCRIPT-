@@ -3,6 +3,11 @@ import { config } from "dotenv";
 config()
 
 import User from "./models/user-model.js";
+import Category from "./models/category-model.js";
+import Menu from "./models/menu-model.js";
+import RestaurantTable from "./models/restaurant-table-model.js";
+import Reservation from "./models/reservation-model.js";
+
 
 
 const sequelize=new Sequelize({
@@ -12,7 +17,7 @@ const sequelize=new Sequelize({
     dialect:"mysql",
     host:process.env.DB_HOST,
     port:Number(process.env.DB_PORT),
-    models:[User]
+    models:[User,Category,Menu,RestaurantTable,Reservation]
 })
 
 sequelize.authenticate()
