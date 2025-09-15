@@ -53,6 +53,12 @@ class User extends Model{
         type:DataType.STRING,
         allowNull:false
     })
+    declare address:string
+
+    @Column({
+        type:DataType.STRING,
+        allowNull:false
+    })
     declare password:string
 
     @Column({

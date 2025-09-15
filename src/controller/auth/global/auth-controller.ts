@@ -7,10 +7,10 @@ import generateOTP from "../../../services/generateOTP.js";
 
 const userRegister=async(req:Request,res:Response)=>{
     //taking data from user
-    const{userName,userEmail,phoneNumber,password,confirmPassword}=req.body
+    const{userName,userEmail,phoneNumber,address,password,confirmPassword}=req.body
 
     //validations
-    if(!userName || !userEmail || !phoneNumber || !password || !confirmPassword){
+    if(!userName || !userEmail || !phoneNumber || !address || !password || !confirmPassword){
         res.status(400).json({
             message:"Please fill all the fields!"
         })
@@ -41,6 +41,7 @@ const userRegister=async(req:Request,res:Response)=>{
         userName,
         userEmail,
         phoneNumber,
+        address,
         password:bcrypt.hashSync(password,12)
     })
 
@@ -49,6 +50,39 @@ const userRegister=async(req:Request,res:Response)=>{
     })
 }
 
+const editUser=async(req:Request,res:Response)=>{
+    const userId=req.params.id
+    //taking data from user
+    const{userName,userEmail,phoneNumber,address,password,confirmPassword}=req.body
+
+    //validations
+    if(!userName || !userEmail || !phoneNumber || !address || !password || !confirmPassword){
+        res.status(400).json({
+            message:"Please fill all the fields!"
+        })
+        return
+    }
+
+
+    await User.update({
+        userName,
+        userEmail,
+        phoneNumber,
+        address
+    },{where:{id:userId}})
+
+    res.status(201).json({
+        message:"User Updated Successfully!"
+    })
+}
+
+const fetchUsers=async(req:Request,res:Response)=>{
+    const data=await User.findAll()
+    res.status(200).json({
+        message:"All Users Fetched Successfully!",
+        data
+    })
+}
 
 const userLogin=async(req:Request,res:Response)=>{
     //input from user
@@ -205,4 +239,4 @@ const resetPassword=async(req:Request,res:Response)=>{
     })
 }
 
-export {userRegister,userLogin,forgotPassword,resetPassword}
+export {userRegister,userLogin,forgotPassword,resetPassword,editUser,fetchUsers}
