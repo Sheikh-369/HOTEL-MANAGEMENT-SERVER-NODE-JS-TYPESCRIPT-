@@ -5,7 +5,7 @@ import { createTable, deleteTable, editTable, fetchSingleTable, fetchTables } fr
 const router:Router=express.Router()
 
 router.route("/restaurant-table").post(asyncErrorHandler(createTable))
-router.route("/restaurant-table").post(asyncErrorHandler(fetchTables))
+router.route("/restaurant-table").get(asyncErrorHandler(fetchTables))
 router.route("/restaurant-table/:id").get(asyncErrorHandler(fetchSingleTable))
 router.route("/restaurant-table/:id").patch(asyncErrorHandler(editTable))
 router.route("/restaurant-table/:id").delete(asyncErrorHandler(deleteTable))

@@ -26,11 +26,11 @@ class RestaurantTable extends Model {
   declare seats: number;
 
   @Column({
-    type: DataType.ENUM("available", "unavailable"),
+    type: DataType.ENUM("available", "reserved"),
     defaultValue: "available",
     allowNull: false,
   })
-  declare tableStatus: "available" | "unavailable";
+  declare tableStatus: "available" | "reserved";
 }
 
 export default RestaurantTable;
