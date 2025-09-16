@@ -4,10 +4,12 @@ import { QueryTypes } from "sequelize";
 
 // Create a new table
 const createTable = async (req: Request, res: Response) => {
-  const { tableNumber, seats, tableStatus } = req.body;
+  console.log("REQ.BODY:", req.body)
 
-  if (!tableNumber || !seats) {
-    res.status(400).json({ message: "Please provide tableNumber and seats!" });
+  const { tableNumber, seats, tableStatus } = req.body || {}
+
+  if (!tableNumber || seats == null || seats <= 0) {
+    res.status(400).json({ message: "Please provide valid tableNumber and seats!" });
     return;
   }
 
