@@ -100,12 +100,19 @@ const editMenu = async (req: Request, res: Response) => {
 
 
 const fetchMenu = async (req: Request, res: Response) => {
-  const data = await sequelize.query(`SELECT * FROM menu`, {
-    type: QueryTypes.SELECT,
-  });
+  const data = await sequelize.query(
+    `
+    SELECT menu.*, category.categoryName
+    FROM menu
+    LEFT JOIN category ON menu.categoryId = category.id
+    `,
+    { type: QueryTypes.SELECT }
+  );
 
   res.status(200).json({ message: "Menu Fetched Successfully!", data });
 };
+
+
 
 const fetchSingleMenu = async (req: Request, res: Response) => {
   const menuId = req.params.id;
