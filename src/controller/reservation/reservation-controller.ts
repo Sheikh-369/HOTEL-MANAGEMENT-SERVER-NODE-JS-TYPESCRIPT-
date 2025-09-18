@@ -87,15 +87,34 @@ const editReservation = async (req: Request, res: Response) => {
 };
 
 const fetchReservations = async (req: Request, res: Response) => {
-  const data = await sequelize.query(`SELECT * FROM reservations`, {
-    type: QueryTypes.SELECT,
-  });
+  const data = await sequelize.query(
+    `
+    SELECT 
+      r.id,
+      r.userId,
+      u.userName,
+      r.tableNumber,
+      t.tableNumber AS tableNo,
+      r.numberOfGuests,
+      r.reservationTime,
+      r.reservationStatus,
+      r.createdAt,
+      r.updatedAt
+    FROM reservations r
+    LEFT JOIN users u ON r.userId = u.id
+    LEFT JOIN tables t ON r.tableNumber = t.id
+    `,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
 
   res.status(200).json({
     message: "All Reservations Fetched Successfully!",
     data,
   });
 };
+
 
 const fetchSingleReservation = async (req: Request, res: Response) => {
   const reservationId = req.params.id;
