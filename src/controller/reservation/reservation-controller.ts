@@ -115,7 +115,6 @@ const fetchReservations = async (req: Request, res: Response) => {
   });
 };
 
-
 const fetchSingleReservation = async (req: Request, res: Response) => {
   const reservationId = req.params.id;
   const data = await sequelize.query(`SELECT * FROM reservations WHERE id=?`, {

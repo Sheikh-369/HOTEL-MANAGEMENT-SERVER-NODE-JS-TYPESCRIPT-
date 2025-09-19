@@ -3,9 +3,9 @@ import Order from "./order-model.js";
 import Menu from "./menu-model.js";
 
 @Table({
-  tableName: "order_items",
-  modelName: "OrderItem",
-  timestamps: true, // maps to createdAt & updatedAt
+  tableName: "orderDetails",
+  modelName: "OrderDetail",
+  timestamps: true
 })
 class OrderItem extends Model {
   @Column({
@@ -17,19 +17,17 @@ class OrderItem extends Model {
 
   @ForeignKey(() => Order)
   @Column({
-    field: "order_id",
     type: DataType.INTEGER,
     allowNull: false,
   })
-  declare orderId: number;
+  declare orderId: number; 
 
   @ForeignKey(() => Menu)
   @Column({
-    field: "menu_item_id",
     type: DataType.INTEGER,
     allowNull: false,
   })
-  declare menuItemId: number;
+  declare menuItemId: number; 
 
   @Column({
     type: DataType.INTEGER,
@@ -44,11 +42,10 @@ class OrderItem extends Model {
   declare price: number;
 
   @Column({
-    field: "deleted_at",
     type: DataType.DATE,
     allowNull: true,
   })
-  declare deletedAt: Date | null;
+  declare deletedAt: Date | null; 
 }
 
 export default OrderItem;

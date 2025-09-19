@@ -5,7 +5,7 @@ import RestaurantTable from "./restaurant-table-model.js";
 @Table({
   tableName: "orders",
   modelName: "Order",
-  timestamps: true, // createdAt & updatedAt (will map to created_at, updated_at if DB uses snake_case)
+  timestamps: true
 })
 class Order extends Model {
   @Column({
